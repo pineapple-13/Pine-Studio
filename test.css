@@ -1,0 +1,85 @@
+body {
+    background: #372403;
+    padding: 15px;
+    margin: 0;  /* remove default margin */
+    font-family: sans-serif;
+}
+
+/* Fixed navbar */
+nav {
+    display: flex;
+    justify-content: center;
+    position: fixed; /* changed from sticky */
+    top: 0;
+    width: 100%;     /* full width */
+    height: 100px;
+    z-index: 1000;   /* stay on top of everything */
+}
+
+/* Add background + styling for nav links */
+.navDiv {
+    background: #a48d2e;
+    border-radius: 20px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-evenly;
+    width: 700px;
+}
+
+.navLink {
+    color: #372403;
+    text-decoration: none;
+}
+
+.navLink:hover {
+    color: #6f4b0c;
+    transition: 0.5s;
+}
+
+/* Heading below navbar */
+.heading {
+    text-align: center;
+    color: #a48d2e;
+    font-size: 1.7em;
+    margin-top: 120px; /* push down so heading isn’t under the fixed nav */
+}
+
+main {
+    background: #a48d2e;
+    padding: 20px;
+    border-radius: 30px;
+    margin-top: 20px;
+}
+
+/* Circular images */
+.case {
+    height: 300px;
+    width: 300px;
+    overflow: hidden;
+    border-radius: 150px;
+    position: relative;
+    display: inline-block;
+}
+
+.cover {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.artists {
+    text-align: center;
+    width: 300px;
+    margin: auto;
+}
+
+.artLink {
+    color: #372403;
+    text-decoration: none;
+}
+
+.artLink:hover {
+    color: #6f4b0c;
+    transition: 0.5s;
+}
