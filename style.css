@@ -27,14 +27,14 @@ nav{
 
 .heading{
     text-align: center;
-    color: #a48d2e;
+    color: #dbb312;
     font-size: 1.7em;
     margin-top: 120px;
     margin-bottom: 55px;
 }
 
-main{
-    background: #a48d2e;
+.mainHome{
+    background: #98702a;
     padding: 20px;
     border-radius: 30px;
     margin-top: 20px;
@@ -62,7 +62,7 @@ main{
 }
 
 .navLink{
-    color: #a48d2e;
+    color: #dbb312;
 }
 
 .navLink:hover{
@@ -80,17 +80,108 @@ main{
 }
 
 footer{
-    color: #a48d2e;
+    color: #dbb312;
     text-align: center;
     margin: 100px auto;
     padding-bottom: 50px;
 }
 
 .insta{
-    color: #a48d2e;
+    color: #dbb312;
 }
 
 .insta:hover{
     color: #665718;
     transition: 0.3s;
+}
+
+/* BILLIE PAGE */
+
+.mainBillie{ 
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 30px;
+    background: #98702a;
+}
+
+.albums{
+    text-align: center;
+    width: 300px;
+}
+
+.albumsCover{
+    height: 300px;
+    width: 300px;
+    overflow: hidden;
+    border-radius: 40px;
+}
+
+.albumsImg{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+
+/* HIT ME HARD AND SOFT PAGE */
+
+.mainHitMeBillie{
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 30px;
+    background: #98702a;
+}
+
+.theSongs{
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    gap: 20px;
+}
+
+.songItem{
+    display: flex;
+    align-items: center;
+    border-radius: 30px;
+    padding: 10px 15px 30px;
+    background-color: #201501;
+}
+
+.songNumBox{
+    background-color: #372403;
+    color: #dbb312;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.songs{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.songName{
+    font-weight: bold;
+    color: #dbb312;
+    font-size: 1.5rem;
+}
+
+.songAudio{
+    width: 100%;
+    outline: none;
+    border-radius: 10px;
+}
+
+.songAudio::-webkit-media-controls-panel {
+  background-color: #dbb312; /* Spotify green-ish */
 }

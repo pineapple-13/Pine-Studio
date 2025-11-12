@@ -1,24 +1,24 @@
 body {
     background: #372403;
     padding: 15px;
-    margin: 0;  /* remove default margin */
+    height: 100vh;
     font-family: sans-serif;
+    margin: 0;
 }
 
-/* Fixed navbar */
+/* Navigation */
 nav {
+    background-color: #201501;
     display: flex;
     justify-content: center;
-    position: fixed; /* changed from sticky */
+    position: fixed;
     top: 0;
-    width: 100%;     /* full width */
     height: 100px;
-    z-index: 1000;   /* stay on top of everything */
+    width: 100%;
+    z-index: 10;
 }
 
-/* Add background + styling for nav links */
 .navDiv {
-    background: #a48d2e;
     border-radius: 20px;
     padding: 10px;
     display: flex;
@@ -27,59 +27,93 @@ nav {
 }
 
 .navLink {
-    color: #372403;
+    color: #a48d2e;
     text-decoration: none;
 }
 
 .navLink:hover {
-    color: #6f4b0c;
+    color: #665718;
     transition: 0.5s;
 }
 
-/* Heading below navbar */
+/* Heading */
 .heading {
     text-align: center;
     color: #a48d2e;
     font-size: 1.7em;
-    margin-top: 120px; /* push down so heading isn’t under the fixed nav */
+    margin-top: 120px;
+    margin-bottom: 55px;
 }
 
-main {
-    background: #a48d2e;
+/* Main song list */
+.mainHitMeBillie {
+    margin-top: 20px;
     padding: 20px;
     border-radius: 30px;
-    margin-top: 20px;
+    background: #a48d2e;
 }
 
-/* Circular images */
-.case {
-    height: 300px;
-    width: 300px;
-    overflow: hidden;
-    border-radius: 150px;
-    position: relative;
-    display: inline-block;
+.theSongs {
+    list-style: none;  /* remove bullets */
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column; /* stack songs vertically */
+    gap: 20px;
 }
 
-.cover {
-    height: 100%;
+.songItem {
+    display: flex;
+    align-items: center;
+    background-color: #201501;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.songNumBox {
+    background-color: #372403;
+    color: #a48d2e;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.songs {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.songName {
+    font-weight: bold;
+    color: #fff;
+}
+
+.songAudio {
     width: 100%;
-    object-fit: cover;
-    pointer-events: none;
+    border-radius: 10px;
+    outline: none;
 }
 
-.artists {
+/* Footer */
+footer {
+    color: #a48d2e;
     text-align: center;
-    width: 300px;
-    margin: auto;
+    margin: 100px auto;
+    padding-bottom: 50px;
 }
 
-.artLink {
-    color: #372403;
-    text-decoration: none;
+.insta {
+    color: #a48d2e;
 }
 
-.artLink:hover {
-    color: #6f4b0c;
-    transition: 0.5s;
+.insta:hover {
+    color: #665718;
+    transition: 0.3s;
 }
