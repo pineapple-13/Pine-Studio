@@ -1,64 +1,36 @@
-body{
-    background:  #372403;;
-    padding: 15px;
-    height: 100vh;
-    font-family: sans-serif;
+*,
+*::before,
+*::after{
+    box-sizing: border-box;
 }
 
+
+body{
+    background:  #372403;
+    margin: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+
+
+/* NAVIGATION */
+
 nav{
+    height: 10vh;
+    width: 100%;
     background-color: #201501;
-    margin-left: -23px;
     display: flex;
     justify-content: center;
     position: fixed;
     top: 0;
-    height: 100px;
-    width: 100%;
     z-index: 10;
 }
 
 .navDiv{
-    border-radius: 20px;
-    padding: 10px;
     display: flex;
-    justify-content: space-evenly;
-    width: 700px;
-}
-
-.heading{
-    text-align: center;
-    color: #dbb312;
-    font-size: 1.7em;
-    margin-top: 120px;
-    margin-bottom: 55px;
-}
-
-.mainHome{
-    background: #98702a;
-    padding: 20px;
-    border-radius: 30px;
-    margin-top: 20px;
-}
-
-.case{
-    height: 300px;
-    width: 300px;
-    overflow:hidden;
-    border-radius: 150px;
-    position: relative;
-    display: inline-block;
-}
-
-.cover{
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    pointer-events: none;
-}
-
-.artists{
-    text-align: center;
-    width: 300px;
+    justify-content: center;
+    align-items: center;
 }
 
 .navLink{
@@ -70,20 +42,138 @@ nav{
     transition: 0.5s;
 }
 
-.artLink{
-    color: #372403;
+
+
+/* HOME PAGE */
+
+.heading{
+    text-align: center;
+    color: #dbb312;
+    font-size: 1.7em;
+    margin: 14vh 0 5vh;
+
 }
 
-.artLink:hover{
+.artistsWrap, .albumsWrap, .songsWrap{
+    background: #98702a;
+    padding: 2rem;
+    border-radius: 2rem;
+    margin: 0 2rem;
+}
+
+.artists, .albums{
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 1rem;
+}
+
+.artsLink, .albumsLink{
+    color: #372403;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.artsLink:hover, .albumsLink:hover{
     color: #6f4b0c;
     transition: 0.5s;
 }
 
+.artsCase, .albumsCase{
+    width: 100%;
+    height: 100%;
+    overflow:hidden;
+    border-radius: 50%;
+    position: relative;
+    display: inline-block;
+}
+
+.artsCover, .albumsCover{
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+}
+
+.artsName, .albumsName{
+    text-align: center;
+}
+
+
+
+/* ALBUMS PAGE */
+
+.albumsCase{
+    border-radius: 1vw;
+}
+
+
+
+/* SONGS */
+
+.songs{
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    border-radius: 2rem;
+    overflow: hidden;
+}
+
+.songsItem{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    padding: 2rem;
+    background-color: #201501;
+}
+
+.songNumWrap{
+    background-color: #372403;
+    color: #dbb312;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 2rem;
+}
+
+.songsName{
+    margin: 0;
+    font-weight: bold;
+    color: #dbb312;
+    font-size: 1.5rem;
+}
+
+.songsAudioWrap{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+}
+
+.songsAudio{
+    width: 100%;
+    outline: none;
+}
+
+.songsAudio::-webkit-media-controls-panel {
+  background-color: #dbb312;
+}
+
+
+
+/* FOOTER */
+
 footer{
     color: #dbb312;
     text-align: center;
-    margin: 100px auto;
-    padding-bottom: 50px;
+    margin: 5rem auto;
 }
 
 .insta{
@@ -93,95 +183,4 @@ footer{
 .insta:hover{
     color: #665718;
     transition: 0.3s;
-}
-
-/* BILLIE PAGE */
-
-.mainBillie{ 
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 30px;
-    background: #98702a;
-}
-
-.albums{
-    text-align: center;
-    width: 300px;
-}
-
-.albumsCover{
-    height: 300px;
-    width: 300px;
-    overflow: hidden;
-    border-radius: 40px;
-}
-
-.albumsImg{
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    pointer-events: none;
-}
-
-
-/* HIT ME HARD AND SOFT PAGE */
-
-.mainHitMeBillie{
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 30px;
-    background: #98702a;
-}
-
-.theSongs{
-    list-style-type: none;
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    margin: 0;
-    gap: 20px;
-}
-
-.songItem{
-    display: flex;
-    align-items: center;
-    border-radius: 30px;
-    padding: 10px 15px 30px;
-    background-color: #201501;
-}
-
-.songNumBox{
-    background-color: #372403;
-    color: #dbb312;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    margin-right: 15px;
-}
-
-.songs{
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.songName{
-    font-weight: bold;
-    color: #dbb312;
-    font-size: 1.5rem;
-}
-
-.songAudio{
-    width: 100%;
-    outline: none;
-    border-radius: 10px;
-}
-
-.songAudio::-webkit-media-controls-panel {
-  background-color: #dbb312; /* Spotify green-ish */
 }
