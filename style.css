@@ -51,7 +51,10 @@ nav{
     color: #dbb312;
     font-size: 1.7em;
     margin: 14vh 0 5vh;
+}
 
+.songsActHeading{
+    color: #dbb312;
 }
 
 .artistsWrap, .albumsWrap, .songsWrap{
@@ -63,7 +66,7 @@ nav{
 
 .artists, .albums{
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 1rem;
 }
 
@@ -75,9 +78,10 @@ nav{
     align-items: center;
 }
 
-.artsLink:hover, .albumsLink:hover{
+.artsCase:hover, .albumsCase:hover{
     color: #6f4b0c;
     transition: 0.5s;
+    transform: scale(1.01);
 }
 
 .artsCase, .albumsCase{
@@ -87,6 +91,8 @@ nav{
     border-radius: 50%;
     position: relative;
     display: inline-block;
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
 }
 
 .artsCover, .albumsCover{
@@ -95,7 +101,7 @@ nav{
     pointer-events: none;
 }
 
-.artsName, .albumsName{
+.artsName, .albumsTitle{
     text-align: center;
 }
 
@@ -128,7 +134,7 @@ nav{
     background-color: #201501;
 }
 
-.songNumWrap{
+.songsNumWrap{
     background-color: #372403;
     color: #dbb312;
     width: 3rem;
@@ -157,13 +163,32 @@ nav{
     padding: 0;
 }
 
-.songsAudio{
+.audioSec{
+    position: fixed;
+    bottom: 0;
     width: 100%;
-    outline: none;
+    background: #201501;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
 }
 
-.songsAudio::-webkit-media-controls-panel {
+.player{
+    width: 100%;
+}
+
+.player::-webkit-media-controls-panel {
   background-color: #dbb312;
+}
+
+
+
+/* HIDDEN */
+
+.hidden{
+    display: none;
 }
 
 
