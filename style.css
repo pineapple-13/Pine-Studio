@@ -120,18 +120,22 @@ nav{
 .songs{
     display: flex;
     flex-direction: column;
-    padding: 0;
+    padding: 1rem;
     margin: 0;
     border-radius: 2rem;
     overflow: hidden;
+    gap: 1rem;
+    background-color: #201501;
+    /* background-color: wheat; */
 }
 
 .songsItem{
     display: flex;
     align-items: center;
     justify-self: center;
-    padding: 2rem;
+    padding: 1.5rem;
     background-color: #201501;
+    cursor: pointer;
 }
 
 .songsNumWrap{
@@ -168,21 +172,87 @@ nav{
     bottom: 0;
     width: 100%;
     background: #201501;
-    padding: 1.5rem;
+    padding: 2rem;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 1rem;
     border-radius: 1rem;
+}
+
+.btnWrap{
+    width: 70%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.btn{
 }
 
 .player{
     width: 100%;
+    height: 4rem;
+}
+
+svg{
+    width: 4rem;
+    height: 4rem;
+    background-color: #dbb312;
+    border-radius: 50%;
+    padding: 1rem;
 }
 
 .player::-webkit-media-controls-panel {
   background-color: #dbb312;
 }
 
+.timeWrap{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.audioTime{
+    color: #dbb312;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progWrap {
+    width: 100%;
+    height: 0.5rem;
+    background: #575143;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.progBar {
+    height: 100%;
+    width: 0%;
+    background: #dbb312;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progDot {
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    right: -7px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
 
 
 /* HIDDEN */

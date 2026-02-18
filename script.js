@@ -22,7 +22,7 @@ const music = [
                 songs: [
                     { songTitle: "SKINNY", file: "songs/skinny.mp3" },
                     { songTitle: "LUNCH", file: "songs/lunch.mp3" },
-                    { songTitle: "CHIHIRO", file: "songs/skinny.mp3" },
+                    { songTitle: "CHIHIRO", file: "songs/chihiro.mp3" },
                     { songTitle: "BIRDS OF A FEATHER", file: "songs/birdsOfAFeather.mp3" },
                     { songTitle: "WILDFLOWER", file: "songs/wildflower.mp3" },
                     { songTitle: "THE GREATEST", file: "songs/theGreatest.mp3" },
@@ -166,6 +166,9 @@ function renderSongs(artistIndex, albumIndex){
         songsItem.appendChild(songsAudioWrap);
 
         songsItem.addEventListener('click', () => {
+            const audioSec = document.querySelector(".audioSec");
+            audioSec.classList.remove("hidden")
+
             const player = document.querySelector(".player");
             player.src = song.file;
             player.play();
@@ -176,3 +179,77 @@ function renderSongs(artistIndex, albumIndex){
 }
 
 renderArtists();
+
+const progressBar = document.querySelector(".progBar");
+const audio = document.querySelector(".player");
+const audioTime = document.querySelector(".audioTime");
+
+audio.addEventListener("loadedmetadata", () => {
+    const duration = audio.duration; // seconds
+    audioTime.textContent = formatTime(duration);
+});
+
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs.toString().padStart(2, "0")}`;
+}
+
+
+function updateProgress() {
+    const percent =
+        (audio.currentTime / audio.duration) * 100;
+
+    progressBar.style.width = percent + "%";
+
+    requestAnimationFrame(updateProgress);
+}
+
+// start animation when playing
+audio.addEventListener("play", () => {
+    requestAnimationFrame(updateProgress);
+});
+
+const container = document.querySelector(".progWrap");
+
+container.addEventListener("click", (e) => {
+    const width = container.clientWidth;
+    const clickX = e.offsetX;
+
+    const duration = audio.duration;
+    audio.currentTime = (clickX / width) * duration;
+});
+
+let isDragging = false;
+
+const dot = document.querySelector(".progDot");
+
+dot.addEventListener("mousedown", () => {
+    isDragging = true;
+});
+
+document.addEventListener("mouseup", () => {
+    isDragging = false;
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+
+    const rect = container.getBoundingClientRect();
+    let offsetX = e.clientX - rect.left;
+
+    // clamp to container width
+    offsetX = Math.max(0, Math.min(offsetX, rect.width));
+
+    // calculate percentage
+    const percent = offsetX / rect.width;
+
+    // update audio time
+    audio.currentTime = percent * audio.duration;
+
+    // update visual bar width
+    const progressBar = document.querySelector(".progBar");
+    progressBar.style.width = percent * 100 + "%";
+});
+
+
