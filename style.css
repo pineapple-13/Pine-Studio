@@ -2,6 +2,7 @@
 *::before,
 *::after{
     box-sizing: border-box;
+    user-select: none;
 }
 
 
@@ -33,11 +34,12 @@ nav{
     align-items: center;
 }
 
-.navLink{
+.homeLink{
     color: #dbb312;
+    cursor: pointer;
 }
 
-.navLink:hover{
+.homeLink:hover{
     color: #665718;
     transition: 0.5s;
 }
@@ -188,6 +190,7 @@ nav{
 }
 
 .btn{
+    cursor: pointer;
 }
 
 .player{

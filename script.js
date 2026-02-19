@@ -1,6 +1,7 @@
 const homePage = document.querySelector(".homePage");
 const albumsPage = document.querySelector(".albumsPage");
 const songsPage = document.querySelector(".songsPage");
+const homeLink = document.querySelector(".homeLink");
 
 let currentPage = homePage;
 
@@ -10,6 +11,10 @@ function showPage(pageToShow){
 
     currentPage = pageToShow;
 }
+
+homeLink.addEventListener('click', () =>{
+    showPage(homePage);
+})
 
 const music = [
     {
@@ -42,6 +47,8 @@ const songsList = document.querySelector(".songs");
 
 let currentArtist = null;
 let currentAlbum = null;
+let currentSongIndex = 0;
+let currentSongsList = [];
 
 function renderArtists(){
     music.forEach((artist, artistIndex) => {
@@ -84,6 +91,7 @@ function renderArtists(){
 }
 
 function renderAlbums(artistIndex){
+    albumsContainer.innerHTML = "";
 
     const artistName = music[artistIndex].artistName;
     const albumsActHeading =document.querySelector(".albumsActHeading");
@@ -137,6 +145,7 @@ function renderSongs(artistIndex, albumIndex){
     songsActHeading.textContent = albumTitle;
 
     const songs = music[artistIndex].albums[albumIndex].songs;
+    currentSongsList = songs;
 
     songs.forEach((song, songIndex) =>{
         const songsItem = document.createElement("li");
@@ -167,18 +176,74 @@ function renderSongs(artistIndex, albumIndex){
 
         songsItem.addEventListener('click', () => {
             const audioSec = document.querySelector(".audioSec");
-            audioSec.classList.remove("hidden")
+            audioSec.classList.remove("hidden");
+
+            currentSongIndex = songIndex;
 
             const player = document.querySelector(".player");
             player.src = song.file;
             player.play();
+
+            const shuffle = document.querySelector(".shuffle");
+            const previous = document.querySelector(".previous");
+            const play = document.querySelector(".play");
+            const pause = document.querySelector(".pause");
+            const next = document.querySelector(".next");
+            const loop = document.querySelector(".loop");
+            
+            play.addEventListener('click', () => {
+                player.pause()
+                play.classList.add("hidden");
+                pause.classList.remove("hidden");
+            });
+
+            pause.addEventListener('click', () => {
+                player.play();
+                pause.classList.add("hidden");
+                play.classList.remove("hidden")
+            });
+
+            next.addEventListener('click', () => {
+                currentSongIndex++;
+
+                if(currentSongIndex >= currentSongsList.length) {
+                    currentSongIndex = 0;
+                };
+
+                player.src = currentSongsList[currentSongIndex].file;
+
+                if(!play.classList.contains("hidden")) {
+                    player.play();
+                };
+            })
+
+            previous.addEventListener('click', () => {
+                currentSongIndex--;
+
+                if(currentSongIndex < 0) {
+                    currentSongIndex = currentSongsList.length - 1;
+                };
+
+                player.src = currentSongsList[currentSongIndex].file;
+
+                if(!play.classList.contains("hidden")) {
+                    player.play();
+                };
+            })
         })
+
 
         songsList.appendChild(songsItem);
     })
 }
 
 renderArtists();
+
+
+
+
+
+
 
 const progressBar = document.querySelector(".progBar");
 const audio = document.querySelector(".player");
