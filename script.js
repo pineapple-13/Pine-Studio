@@ -1,21 +1,3 @@
-const homePage = document.querySelector(".homePage");
-const albumsPage = document.querySelector(".albumsPage");
-const songsPage = document.querySelector(".songsPage");
-const homeLink = document.querySelector(".homeLink");
-
-let currentPage = homePage;
-
-function showPage(pageToShow){
-    currentPage.classList.add("hidden");
-    pageToShow.classList.remove("hidden");
-
-    currentPage = pageToShow;
-}
-
-homeLink.addEventListener('click', () =>{
-    showPage(homePage);
-})
-
 const music = [
     {
         artistName: "BILLIE EILISH",
@@ -41,14 +23,64 @@ const music = [
     }
 ]
 
+let allSongs = [];
+
+function buildLibrary() {
+    allSongs = [];
+
+    music.forEach((artist, artistIndex) => {
+        artist.albums.forEach((album, albumIndex) => {
+            album.songs.forEach((song, songIndex) => {
+
+                allSongs.push({
+                    songTitle: song.songTitle,
+                    file: song.file,
+
+                    artistName: artist.artistName,
+                    artistImg: artist.artistImg,
+                    albumTitle: album.albumTitle,
+                    albumImg: album.albumImg,
+
+                    artistIndex,
+                    albumIndex,
+                    songIndex
+                });
+
+            });
+        });
+    });
+}
+
+buildLibrary();
+
+const homePage = document.querySelector(".homePage");
+const albumsPage = document.querySelector(".albumsPage");
+const songsPage = document.querySelector(".songsPage");
+const homeLink = document.querySelector(".homeLink");
+
+let currentPage = homePage;
+
+function showPage(pageToShow){
+    currentPage.classList.add("hidden");
+    pageToShow.classList.remove("hidden");
+
+    currentPage = pageToShow;
+}
+
+homeLink.addEventListener('click', () =>{
+    showPage(homePage);
+})
+
 const artistsContainer = document.querySelector(".artists");
 const albumsContainer = document.querySelector(".albums");
 const songsList = document.querySelector(".songs");
 
 let currentArtist = null;
 let currentAlbum = null;
-let currentSongIndex = 0;
+let currentSongIndex = -1;
 let currentSongsList = [];
+
+let activeList = [];
 
 function renderArtists(){
     music.forEach((artist, artistIndex) => {
@@ -138,7 +170,25 @@ function renderAlbums(artistIndex){
     })
 }
 
+function buildShuffleQueueFromAllSongs(startFile) {
+
+    shuffleQueue = allSongs.map((_, i) => i);
+
+    for (let i = shuffleQueue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffleQueue[i], shuffleQueue[j]] =
+        [shuffleQueue[j], shuffleQueue[i]];
+    }
+
+    shuffleIndex = shuffleQueue.findIndex(
+        i => allSongs[i].file === startFile
+    );
+
+    activeList = allSongs;
+}
+
 function renderSongs(artistIndex, albumIndex){
+    songsList.innerHTML = "";
 
     const albumTitle = music[artistIndex].albums[albumIndex].albumTitle;
     const songsActHeading = document.querySelector(".songsActHeading");
@@ -178,64 +228,158 @@ function renderSongs(artistIndex, albumIndex){
             const audioSec = document.querySelector(".audioSec");
             audioSec.classList.remove("hidden");
 
+            activeList = currentSongsList;
             currentSongIndex = songIndex;
+
+            if (isShuffle) {
+                buildShuffleQueueFromAllSongs(song.file);
+            }
 
             const player = document.querySelector(".player");
             player.src = song.file;
             player.play();
+            audioSec.classList.remove("hidden");
 
-            const shuffle = document.querySelector(".shuffle");
-            const previous = document.querySelector(".previous");
-            const play = document.querySelector(".play");
-            const pause = document.querySelector(".pause");
-            const next = document.querySelector(".next");
-            const loop = document.querySelector(".loop");
-            
-            play.addEventListener('click', () => {
-                player.pause()
-                play.classList.add("hidden");
-                pause.classList.remove("hidden");
-            });
-
-            pause.addEventListener('click', () => {
-                player.play();
-                pause.classList.add("hidden");
-                play.classList.remove("hidden")
-            });
-
-            next.addEventListener('click', () => {
-                currentSongIndex++;
-
-                if(currentSongIndex >= currentSongsList.length) {
-                    currentSongIndex = 0;
-                };
-
-                player.src = currentSongsList[currentSongIndex].file;
-
-                if(!play.classList.contains("hidden")) {
-                    player.play();
-                };
-            })
-
-            previous.addEventListener('click', () => {
-                currentSongIndex--;
-
-                if(currentSongIndex < 0) {
-                    currentSongIndex = currentSongsList.length - 1;
-                };
-
-                player.src = currentSongsList[currentSongIndex].file;
-
-                if(!play.classList.contains("hidden")) {
-                    player.play();
-                };
-            })
+            play.classList.add("hidden");
+            pause.classList.remove("hidden");            
         })
-
-
+        
+        
         songsList.appendChild(songsItem);
     })
 }
+
+const player = document.querySelector(".player");
+const audioSec = document.querySelector(".audioSec");
+const shuffle = document.querySelector(".shuffle");
+const previous = document.querySelector(".previous");
+const play = document.querySelector(".play");
+const pause = document.querySelector(".pause");
+const next = document.querySelector(".next");
+const loop = document.querySelector(".loop");
+const remove = document.querySelector(".remove");
+
+let isShuffle = false;
+let isLoop = false;
+let shuffleQueue = [];
+let shuffleIndex = 0;
+
+remove.addEventListener('click', () => {
+    player.pause();
+    player.src = "";
+    player.load();
+
+    currentSongIndex = -1;
+    currentSongsList = []
+
+    pause.classList.add("hidden");
+    play.classList.remove("hidden");
+    audioSec.classList.add("hidden");
+})
+
+play.addEventListener('click', () => {
+    player.play()
+    play.classList.add("hidden");
+    pause.classList.remove("hidden");
+});
+
+pause.addEventListener('click', () => {
+    player.pause();
+    pause.classList.add("hidden");
+    play.classList.remove("hidden")
+});
+
+shuffle.addEventListener('click', () => {
+    isShuffle = !isShuffle;
+    shuffle.classList.toggle("btnActive", isShuffle);
+    
+    if (isShuffle && player.src){
+        buildShuffleQueueFromAllSongs(activeList[currentSongIndex].file);
+    } else {
+        activeList = currentSongsList
+    }
+});
+
+loop.addEventListener('click', () => {
+    isLoop = !isLoop;
+    loop.classList.toggle("btnActive", isLoop);
+});
+
+next.addEventListener('click', () => {
+    if (currentSongIndex === -1) return;
+
+    if (isLoop) {
+    }
+    else if (isShuffle) {
+
+        shuffleIndex++;
+
+        if (shuffleIndex >= shuffleQueue.length) {
+            buildShuffleQueueFromAllSongs(
+                allSongs[shuffleQueue[0]].file
+            );
+            shuffleIndex = 0;
+        }
+
+        currentSongIndex = shuffleQueue[shuffleIndex];
+        player.src = allSongs[currentSongIndex].file;
+
+    } else {
+
+        currentSongIndex++;
+        if (currentSongIndex >= activeList.length)
+            currentSongIndex = 0;
+
+        player.src = activeList[currentSongIndex].file;
+    }
+
+    player.load();
+    if (play.classList.contains("hidden")) player.play();
+});
+
+previous.addEventListener('click', () => {
+    if (currentSongIndex === -1) return;
+
+    if (isShuffle) {
+
+        shuffleIndex--;
+        if (shuffleIndex < 0)
+            shuffleIndex = shuffleQueue.length - 1;
+
+        currentSongIndex = shuffleQueue[shuffleIndex];
+        player.src = allSongs[currentSongIndex].file;
+
+    } else {
+
+        currentSongIndex--;
+        if (currentSongIndex < 0)
+            currentSongIndex = activeList.length - 1;
+
+        player.src = activeList[currentSongIndex].file;
+    }
+
+    player.load();
+    if (play.classList.contains("hidden")) player.play();
+});
+
+player.addEventListener('ended', () => {
+    next.click();
+});
+
+remove.addEventListener('click', () => {
+    player.pause();
+    player.src = "";
+    player.load();
+
+    currentSongIndex = -1;
+    currentSongsList = [];
+    shuffleQueue = [];
+    shuffleIndex = 0;
+
+    pause.classList.add("hidden");
+    play.classList.remove("hidden");
+    audioSec.classList.add("hidden");
+});
 
 renderArtists();
 
