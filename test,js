@@ -1,11 +1,11 @@
 const music = [
     {
         artistName: "BILLIE EILISH",
-        artistImg: "imgs/billieEilish.jpg",
+        artistImg: "imgs/artists/billieEilish.jpg",
         albums: [
             {
                 albumTitle: "HIT ME HARD OR SOFT",
-                albumImg: "imgs/billieEilish.jpg",
+                albumImg: "imgs/albums/hitMeHardAndSoft.jpg",
                 songs: [
                     { songTitle: "SKINNY", file: "songs/skinny.mp3" },
                     { songTitle: "LUNCH", file: "songs/lunch.mp3" },
@@ -19,6 +19,48 @@ const music = [
                     { songTitle: "BLUE", file: "songs/blue.mp3" }
                 ],
             }
+        ],
+    },
+    {
+        artistName: "LANA DEL REY",
+        artistImg: "imgs/artists/lanaDelRey.jpg",
+        albums: [
+        ]
+    },
+    {
+        artistName: "TV GIRL",
+        artistImg: "imgs/artists/tvGirl.jpg",
+        albums: [
+        ]
+    },
+    {
+        artistName: "ARTIC MONKEYS",
+        artistImg: "imgs/artists/articMonkeys.jpg",
+        albums: [
+        ]
+    },
+    {
+        artistName: "DOJA CAT",
+        artistImg: "imgs/artists/dojaCat.jpg",
+        albums: [
+        ]
+    },
+    {
+        artistName: "KATE PERRY",
+        artistImg: "imgs/artists/katePerry.jpg",
+        albums: [
+        ]
+    },
+    {
+        artistName: "THE SMITHS",
+        artistImg: "imgs/artists/theSmiths.jpg",
+        albums: [
+        ]
+    },
+    {
+        artistName: "SOMBR",
+        artistImg: "imgs/artists/sombr.jpg",
+        albums: [
         ]
     }
 ]

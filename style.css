@@ -70,6 +70,7 @@ nav{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 1rem;
+    align-items: start;
 }
 
 .artsLink, .albumsLink{
@@ -78,12 +79,6 @@ nav{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-.artsCase:hover, .albumsCase:hover{
-    color: #6f4b0c;
-    transition: 0.5s;
-    transform: scale(1.01);
 }
 
 .artsCase, .albumsCase{
@@ -95,6 +90,12 @@ nav{
     display: inline-block;
     aspect-ratio: 1 / 1;
     cursor: pointer;
+}
+
+.artsCase:hover, .albumsCase:hover{
+    color: #6f4b0c;
+    transition: 0.5s;
+    transform: scale(1.01);
 }
 
 .artsCover, .albumsCover{
