@@ -58,10 +58,6 @@ nav{
     margin: 14vh 0 5vh;
 }
 
-.songsActHeading{
-    color: #dbb312;
-}
-
 .artistsWrap, .albumsWrap, .songsWrap{
     background: #98702a;
     padding: 2rem;
@@ -114,25 +110,26 @@ nav{
     text-align: center;
 }
 
-.homeSongsWrap{
-    background-color: wheat;
-    border-radius: 2rem;
+.homeSongsWrap, .homeAlbumsWrap{
+    padding: 0;
+    margin: 0;
+    border-radius: 1rem;
     overflow: visible;
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
 
-.homeSongsWrap::-webkit-scrollbar{
+.homeSongsWrap::-webkit-scrollbar, .homeAlbumsWrap::-webkit-scrollbar{
   display:none;
 }
 
-.homeSongs{
+.homeSongs, .homeAlbums{
     width: fit-content;
     display: flex;
     padding: 0;
     margin: 0;
-    background-color: #98702a;
+    background-color: #614107;
 }
 
 .homeSongsItem{
@@ -143,22 +140,61 @@ nav{
     margin: 0;
     padding: 0;
     cursor: pointer;
-    border: 51px solid #614107;
+    border: solid #614107;
+    border-radius: 1rem;
+    overflow: hidden;
 }
 
-.homeSongsFirstRow .homeSongsItem{
-    border-bottom: none;
-    
+.homeSongsFirstRow .homeSongsItem, .homeAlbumsFirstRow .homeAlbumsItem{
+    border-width: 10px 5px 5px 5px;
 }
 
+.homeSongsSecondRow .homeSongsItem, .homeAlbumsSecondRow .homeAlbumsItem{
+    border-width: 5px 5px 10px 5px;
+}
+
+.homeSongsFirstRow .homeSongsItem:first-child, 
+.homeSongsSecondRow .homeSongsItem:first-child, 
+.homeAlbumsFirstRow .homeAlbumsItem:first-child,
+.homeAlbumsSecondRow .homeAlbumsItem:first-child {
+    border-left-width: 10px;
+}
+
+.homeSongsFirstRow .homeSongsItem:last-child, 
+.homeSongsSecondRow .homeSongsItem:last-child,
+.homeAlbumsFirstRow .homeAlbumsItem:last-child,
+.homeAlbumsSecondRow .homeAlbumsItem:last-child{
+    border-right-width: 10px;
+}
+
+.homeAlbumsItem{
+    background-color: #201501;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    overflow: hidden;
+    border: solid #614107;
+    border-radius: 1rem;
+}
 .homeSongsImgWrap{
-    width: 8vw;
-    height: 8vw;
+    width: 6vw;
+    height: 6vw;
     aspect-ratio: 1/1;
     overflow: hidden;
 }
 
-.homeSongsImg{
+.homeAlbumsImgWrap{
+    width: 12vw;
+    height: 12vw;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+}
+
+.homeSongsImg, .homeAlbumsImg{
     width: 100%;
     height: 100%;
 }
@@ -170,7 +206,16 @@ nav{
     padding-left: 2rem;
 }
 
-.homeSongsName{
+.homeAlbumsNameWrap{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    gap: 0.3rem;
+}
+
+.homeSongsName, .homeAlbumsName{
     margin: 0;
     font-weight: bold;
     color: #dbb312;
@@ -179,13 +224,20 @@ nav{
 
 .homeSongsArtist{
     display: flex;
-    height: 2rem;
+    height: 1.5rem;
     margin: 0;
-    /* padding-left: 1rem; */
     font-weight: lighter;
     color: #816c18;
     font-size: 1rem;
     align-items: end;
+}
+
+.homeAlbumsArtist{
+    margin: 0;
+    font-weight: lighter;
+    color: #816c18;
+    font-size: 1rem;
+
 }
 
 

@@ -80,13 +80,24 @@ const playerState = {
 
 // DOM ELEMENTS
 const homePage = document.querySelector(".homePage");
+const artistsPage = document.querySelector(".artistsPage");
 const albumsPage = document.querySelector(".albumsPage");
-const songsPage = document.querySelector(".songsPage");
 const homeLink = document.querySelector(".homeLink");
 
-const artistsContainer = document.querySelector(".artists");
-const albumsContainer = document.querySelector(".albums");
-const songsList = document.querySelector(".songs");
+const artistsFirstRow = document.querySelector(".artistsFirstRow");
+const artistsSecondRow = document.querySelector(".artistsSecondRow");
+
+const homeAlbumsFirstRow = document.querySelector(".homeAlbumsFirstRow");
+const homeAlbumsSecondRow = document.querySelector(".homeAlbumsSecondRow");
+
+const homeSongsFirstRow = document.querySelector(".homeSongsFirstRow");
+const homeSongsSecondRow = document.querySelector(".homeSongsSecondRow");
+
+const artistsSongsFirstRow = document.querySelector(".artistsSongsFirstRow");
+const artistsSongsSecondRow = document.querySelector(".artistsSongsSecondRow");
+
+const artistsAlbums = document.querySelector(".artistsAlbums");
+const albumSongs = document.querySelector(".albumsSongs");
 
 const player = document.querySelector(".player");
 const audioSec = document.querySelector(".audioSec");
@@ -151,34 +162,136 @@ function renderList(container, items, createItemCallback) {
 
 // RENDER ARTISTS
 function renderArtists() {
-    renderList(artistsContainer, music, (artist, i) => {
-        const artsLink = document.createElement("div");
-        artsLink.classList.add("artsLink");
 
-        const artsCase = document.createElement("div");
-        artsCase.classList.add("artsCase");
-        const artsCover = document.createElement("img");
-        artsCover.classList.add("artsCover");
-        artsCover.src = artist.artistImg;
-        artsCase.appendChild(artsCover);
+    artistsFirstRow.innerHTML = "";
+    artistsSecondRow.innerHTML = "";
 
-        const artsName = document.createElement("div");
-        artsName.classList.add("artsName");
-        const actName = document.createElement("h2");
-        actName.textContent = artist.artistName;
-        artsName.appendChild(actName);
+    music.forEach((artist, i) => {
 
-        artsLink.appendChild(artsCase);
-        artsLink.appendChild(artsName);
+        const li = document.createElement("li");
+        li.classList.add("artistsItem");
 
-        artsLink.addEventListener("click", () => {
-            playerState.currentArtist = i;
-            showPage(albumsPage);
-            renderAlbums(i);
+        li.innerHTML = `
+        <div class="artistsImgWrap">
+            <img src="${artist.artistImg}" class="artistsImg">
+        </div>
+        <div class="artistsNameWrap">
+            <h2 class="artistsName">${artist.artistName}</h2>
+        </div>
+        `;
+
+        li.addEventListener("click", () => {
+            openArtist(i);
         });
 
-        return artsLink;
+        if (i % 2 === 0) {
+            artistsFirstRow.appendChild(li);
+        } else {
+            artistsSecondRow.appendChild(li);
+        }
+
     });
+
+}
+
+function openArtist(index){
+
+    playerState.currentArtist = index;
+
+    const artist = music[index];
+
+    document.querySelector(".artistsActHeading").textContent =
+        artist.artistName;
+
+    renderArtistSongs(index);
+
+    showPage(document.querySelector(".artistsPage"));
+}
+
+function renderArtistSongs(artistIndex){
+
+    const songs = music[artistIndex].albums[0].songs;
+
+    artistsSongsFirstRow.innerHTML = "";
+    artistsSongsSecondRow.innerHTML = "";
+
+    songs.forEach((song,i)=>{
+
+        const li = document.createElement("li");
+        li.classList.add("artistsSongsItem");
+
+        li.innerHTML = `
+        <div class="artistsSongsImgWrap">
+            <img src="${music[artistIndex].artistImg}" class="artistsSongsImg">
+        </div>
+        <div class="artistsSongsNameWrap">
+            <p class="artistsSongsName">${song.songTitle}</p>
+            <p class="artistsSongsArtist">${music[artistIndex].artistName}</p>
+        </div>
+        `;
+
+        li.addEventListener("click", () => {
+            playerState.currentSongsList = songs;
+            playerState.activeList = songs;
+            playerState.currentSongIndex = i;
+
+            audioSec.classList.remove("hidden");
+
+            playCurrentSong();
+        });
+
+        if(i % 2 === 0){
+            artistsSongsFirstRow.appendChild(li);
+        } else{
+            artistsSongsSecondRow.appendChild(li);
+        }
+
+    });
+}
+
+function openAlbum(artistIndex, albumIndex){
+
+    const album = music[artistIndex].albums[albumIndex];
+
+    document.querySelector(".albumsActHeading").textContent =
+        album.albumTitle;
+
+    const songs = album.songs;
+
+    albumSongsContainer.innerHTML = "";
+
+    songs.forEach((song,i)=>{
+
+        const li = document.createElement("li");
+        li.classList.add("albumsSongsItem");
+
+        li.innerHTML = `
+        <div class="albumsSongsNumWrap">
+            <p class="albumsSongsNum">${i+1}</p>
+        </div>
+        <div class="albumsSongsNameWrap">
+            <p class="albumsSongsName">${song.songTitle}</p>
+        </div>
+        `;
+
+        li.addEventListener("click", () => {
+
+            playerState.currentSongsList = songs;
+            playerState.activeList = songs;
+            playerState.currentSongIndex = i;
+
+            audioSec.classList.remove("hidden");
+
+            playCurrentSong();
+
+        });
+
+        albumSongsContainer.appendChild(li);
+
+    });
+
+    showPage(document.querySelector(".albumsPage"));
+
 }
 
 // RENDER ALBUMS
