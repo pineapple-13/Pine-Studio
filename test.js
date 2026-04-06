@@ -228,69 +228,77 @@ const music = [
     }
 ]
 
-// CENTRALIZED STATE
-const playerState = {
-    currentArtist: null,
-    currentAlbum: null,
-    currentSongIndex: -1,
-    currentSongsList: [],
-    activeList: [],
-    shuffleQueue: [],
-    shuffleIndex: 0,
-    isShuffle: false,
-    isLoop: false
-};
+
+let allAlbums = [];
+
+function buildAllAlbums() {
+    allAlbums = [];
+
+    music.forEach((artist, artistIndex) => {
+        artist.albums.forEach((album, albumIndex) => {
+            allAlbums.push({
+                ...album,
+                artistName: artist.artistName,
+                artistImg: artist.artistImg,
+                artistIndex,
+                albumIndex
+            });
+        });
+    });
+}
+
+buildAllAlbums();
+
+function shuffleArray(array) {
+    const shuffled = [...array];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled;
+}
 
 // DOM ELEMENTS
-const homePage = document.querySelector(".homePage");
-const albumsPage = document.querySelector(".albumsPage");
-const songsPage = document.querySelector(".songsPage");
-const homeLink = document.querySelector(".homeLink");
+const home = document.querySelector(".home");
 
-const artistsContainer = document.querySelector(".artists");
-const albumsContainer = document.querySelector(".albums");
-const songsList = document.querySelector(".songs");
+const homePage = document.querySelector(".homePage");
+const artistsPage = document.querySelector(".artistsPage");
+const albumsPage = document.querySelector(".albumsPage");
+
+const artistsFirstRow = document.querySelector(".artistsFirstRow");
+const artistsSecondRow = document.querySelector(".artistsSecondRow");
+const homeAlbumsFirstRow = document.querySelector(".homeAlbumsFirstRow");
+const homeAlbumsSecondRow = document.querySelector(".homeAlbumsSecondRow");
+const homeSongsFirstRow = document.querySelector(".homeSongsFirstRow");
+const homeSongsSecondRow = document.querySelector(".homeSongsSecondRow");
+
+const artistsSongsFirstRow = document.querySelector(".artistsSongsFirstRow");
+const artistsSongsSecondRow = document.querySelector(".artistsSongsSecondRow");
+const artistsAlbums = document.querySelector(".artistsAlbums");
+
+const albumSongs = document.querySelector(".albumsSongs");
+
+const audioSec = document.querySelector(".audioSec");
+const audioSongsImg = document.querySelector(".audioSongsImg");
+const audioSongsName = document.querySelector(".audioSongsName");
+const audioSongsArtist = document.querySelector(".audioSongsArtist");
 
 const player = document.querySelector(".player");
-const audioSec = document.querySelector(".audioSec");
-const shuffleBtn = document.querySelector(".shuffle");
-const previousBtn = document.querySelector(".previous");
+const shuffle = document.querySelector(".shuffle");
+const previous = document.querySelector(".previous");
 const play = document.querySelector(".play");
 const pause = document.querySelector(".pause");
-const nextBtn = document.querySelector(".next");
-const loopBtn = document.querySelector(".loop");
-const removeBtn = document.querySelector(".remove");
+const next = document.querySelector(".next");
+const loop = document.querySelector(".loop");
+const remove = document.querySelector(".remove");
 
 const progressBar = document.querySelector(".progBar");
 const container = document.querySelector(".progWrap");
 const audioTime = document.querySelector(".audioTime");
 const dot = document.querySelector(".progDot");
 
-// BUILD ALL SONGS FOR SHUFFLE
-let allSongs = [];
-
-function buildLibrary() {
-    allSongs = [];
-    music.forEach((artist, artistIndex) => {
-        artist.albums.forEach((album, albumIndex) => {
-            album.songs.forEach((song, songIndex) => {
-                allSongs.push({
-                    songTitle: song.songTitle,
-                    file: song.file,
-                    artistName: artist.artistName,
-                    artistImg: artist.artistImg,
-                    albumTitle: album.albumTitle,
-                    albumImg: album.albumImg,
-                    artistIndex,
-                    albumIndex,
-                    songIndex
-                });
-            });
-        });
-    });
-}
-
-buildLibrary();
 
 // PAGE NAVIGATION
 let currentPage = homePage;
@@ -301,291 +309,73 @@ function showPage(pageToShow) {
     currentPage = pageToShow;
 }
 
-homeLink.addEventListener("click", () => showPage(homePage));
+home.addEventListener("click", () => showPage(homePage));
 
-// GENERIC RENDER FUNCTION
-function renderList(container, items, createItemCallback) {
-    container.innerHTML = "";
-    items.forEach((item, index) => {
-        const element = createItemCallback(item, index);
-        container.appendChild(element);
-    });
-}
 
 // RENDER ARTISTS
 function renderArtists() {
-    renderList(artistsContainer, music, (artist, i) => {
-        const artsLink = document.createElement("div");
-        artsLink.classList.add("artsLink");
+    artistsFirstRow.innerHTML = "";
+    artistsSecondRow.innerHTML = "";
 
-        const artsCase = document.createElement("div");
-        artsCase.classList.add("artsCase");
-        const artsCover = document.createElement("img");
-        artsCover.classList.add("artsCover");
-        artsCover.src = artist.artistImg;
-        artsCase.appendChild(artsCover);
+    music.forEach((artist, i) => {
 
-        const artsName = document.createElement("div");
-        artsName.classList.add("artsName");
-        const actName = document.createElement("h2");
-        actName.textContent = artist.artistName;
-        artsName.appendChild(actName);
+        const li = document.createElement("li");
+        li.classList.add("artistsItem");
 
-        artsLink.appendChild(artsCase);
-        artsLink.appendChild(artsName);
+        li.innerHTML = `
+        <div class="artistsImgWrap">
+            <img src="${artist.artistImg}" class="artistsImg">
+        </div>
+        <div class="artistsNameWrap">
+            <h2 class="artistsName">${artist.artistName}</h2>
+        </div>
+        `;
 
-        artsLink.addEventListener("click", () => {
-            playerState.currentArtist = i;
-            showPage(albumsPage);
-            renderAlbums(i);
+        li.addEventListener("click", () => {
+            openArtist(i);
         });
 
-        return artsLink;
-    });
-}
-
-// RENDER ALBUMS
-function renderAlbums(artistIndex) {
-    const artistName = music[artistIndex].artistName;
-    document.querySelector(".albumsActHeading").textContent = artistName;
-
-    const albums = music[artistIndex].albums;
-
-    renderList(albumsContainer, albums, (album, i) => {
-        const albumsLink = document.createElement("div");
-        albumsLink.classList.add("albumsLink");
-
-        const albumsCase = document.createElement("div");
-        albumsCase.classList.add("albumsCase");
-        const albumsCover = document.createElement("img");
-        albumsCover.classList.add("albumsCover");
-        albumsCover.src = album.albumImg;
-        albumsCase.appendChild(albumsCover);
-
-        const albumsTitle = document.createElement("div");
-        albumsTitle.classList.add("albumsTitle");
-        const actTitle = document.createElement("h2");
-        actTitle.textContent = album.albumTitle;
-        albumsTitle.appendChild(actTitle);
-
-        albumsLink.appendChild(albumsCase);
-        albumsLink.appendChild(albumsTitle);
-
-        albumsLink.addEventListener("click", () => {
-            playerState.currentAlbum = i;
-            showPage(songsPage);
-            renderSongs(artistIndex, i);
-        });
-
-        return albumsLink;
-    });
-}
-
-// RENDER SONGS
-function renderSongs(artistIndex, albumIndex) {
-    const songs = music[artistIndex].albums[albumIndex].songs;
-    playerState.currentSongsList = songs;
-    playerState.activeList = songs;
-
-    document.querySelector(".songsActHeading").textContent = music[artistIndex].albums[albumIndex].albumTitle;
-
-    renderList(songsList, songs, (song, i) => {
-        const songsItem = document.createElement("li");
-        songsItem.classList.add("songsItem");
-
-        const songsNumWrap = document.createElement("div");
-        songsNumWrap.classList.add("songsNumWrap");
-        const songsNum = document.createElement("p");
-        songsNum.classList.add("songsNum");
-        songsNum.textContent = i + 1;
-        songsNumWrap.appendChild(songsNum);
-
-        const songsAudioWrap = document.createElement("div");
-        songsAudioWrap.classList.add("songsAudioWrap");
-        const songsName = document.createElement("p");
-        songsName.classList.add("songsName");
-        songsName.textContent = song.songTitle;
-        songsAudioWrap.appendChild(songsName);
-
-        songsItem.appendChild(songsNumWrap);
-        songsItem.appendChild(songsAudioWrap);
-
-        songsItem.addEventListener("click", () => {
-            playerState.currentSongIndex = i;
-            audioSec.classList.remove("hidden");
-
-            if (playerState.isShuffle) {
-                buildShuffleQueue(playerState.currentSongsList[i].file);
-            }
-
-            playCurrentSong();
-        });
-
-        return songsItem;
-    });
-}
-
-// PLAYBACK FUNCTIONS
-function playCurrentSong() {
-    const song = playerState.activeList[playerState.currentSongIndex];
-    if (!song) return;
-
-    player.src = song.file;
-    player.load();
-    player.play();
-    play.classList.add("hidden");
-    pause.classList.remove("hidden");
-}
-
-function playNext() {
-    if (!playerState.activeList.length) return;
-
-    if (playerState.isLoop) {
-        playCurrentSong();
-        return;
-    }
-
-    if (playerState.isShuffle) {
-        playerState.shuffleIndex++;
-        if (playerState.shuffleIndex >= playerState.shuffleQueue.length) {
-            // reshuffle
-            buildShuffleQueue(playerState.currentSongIndex);
+        if (i % 2 === 0) {
+            artistsFirstRow.appendChild(li);
+        } else {
+            artistsSecondRow.appendChild(li);
         }
-        playerState.currentSongIndex = playerState.shuffleQueue[playerState.shuffleIndex];
-    } else {
-        playerState.currentSongIndex++;
-        if (playerState.currentSongIndex >= playerState.activeList.length) playerState.currentSongIndex = 0;
-    }
+    });
+};
 
-    playCurrentSong();
-}
 
-function playPrevious() {
-    if (!playerState.activeList.length) return;
+// RENDER HOME ALBUMS
+function renderHomeAlbums() {
+    homeAlbumsFirstRow.innerHTML = "";
+    homeAlbumsSecondRow.innerHTML = "";
 
-    if (playerState.isShuffle) {
-        playerState.shuffleIndex--;
-        if (playerState.shuffleIndex < 0) {
-            playerState.shuffleIndex = playerState.shuffleQueue.length - 1;
+    const shuffledAlbums = shuffleArray(allAlbums);
+
+    shuffledAlbums.forEach((album, i) => {
+        const li = document.createElement("li");
+        li.classList.add("homeAlbumsItem");
+
+        li.innerHTML = `
+        <div class="homeAlbumsImgWrap">
+            <img src="${album.albumImg}" class="homeAlbumsImg">
+        </div>
+        <div class="homeAlbumsNameWrap">
+            <p class="homeAlbumsName">${album.albumTitle}</p>
+            <p class="homeAlbumsArtist">${album.artistName}</p>
+        </div>
+        `;
+
+        li.addEventListener("click", () => {
+            openAlbum(album.artistIndex, album.albumIndex);
+        });
+
+        if (i % 2 === 0) {
+            homeAlbumsFirstRow.appendChild(li);
+        } else {
+            homeAlbumsSecondRow.appendChild(li);
         }
-        playerState.currentSongIndex = playerState.shuffleQueue[playerState.shuffleIndex];
-    } else {
-        playerState.currentSongIndex--;
-        if (playerState.currentSongIndex < 0) playerState.currentSongIndex = playerState.activeList.length - 1;
-    }
-
-    playCurrentSong();
+    });
 }
 
-// SHUFFLE QUEUE
-function buildShuffleQueue(startIndex = 0) {
-    // create an array of indexes
-    playerState.shuffleQueue = playerState.activeList.map((_, i) => i);
-
-    // Fisher-Yates shuffle
-    for (let i = playerState.shuffleQueue.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [playerState.shuffleQueue[i], playerState.shuffleQueue[j]] =
-            [playerState.shuffleQueue[j], playerState.shuffleQueue[i]];
-    }
-
-    // ensure the currently playing song is first in shuffle
-    if (startIndex !== undefined && startIndex >= 0) {
-        const idxInShuffle = playerState.shuffleQueue.findIndex(i => i === startIndex);
-        [playerState.shuffleQueue[0], playerState.shuffleQueue[idxInShuffle]] =
-            [playerState.shuffleQueue[idxInShuffle], playerState.shuffleQueue[0]];
-        playerState.shuffleIndex = 0;
-    }
-}
-
-// BUTTONS
-play.addEventListener('click', () => {
-    player.play()
-    play.classList.add("hidden");
-    pause.classList.remove("hidden");
-});
-
-pause.addEventListener('click', () => {
-    player.pause();
-    pause.classList.add("hidden");
-    play.classList.remove("hidden")
-});
-
-shuffleBtn.addEventListener("click", () => {
-    playerState.isShuffle = !playerState.isShuffle;
-    shuffleBtn.classList.toggle("btnActive", playerState.isShuffle);
-
-    if (playerState.isShuffle && playerState.currentSongIndex >= 0) {
-        buildShuffleQueue(playerState.currentSongIndex);
-    }
-});
-
-loopBtn.addEventListener("click", () => {
-    playerState.isLoop = !playerState.isLoop;
-    loopBtn.classList.toggle("btnActive", playerState.isLoop);
-});
-
-nextBtn.addEventListener("click", playNext);
-previousBtn.addEventListener("click", playPrevious);
-
-removeBtn.addEventListener("click", () => {
-    player.pause();
-    player.src = "";
-
-    // reset state
-    playerState.currentSongIndex = -1;
-    playerState.currentSongsList = [];
-    playerState.activeList = [];
-    playerState.shuffleQueue = [];
-    playerState.shuffleIndex = 0;
-
-    // hide player UI
-    audioSec.classList.add("hidden");
-    pause.classList.add("hidden");
-    play.classList.remove("hidden");
-});
-
-// AUDIO EVENTS
-player.addEventListener("ended", () => playerState.isLoop ? playCurrentSong() : playNext());
-
-player.addEventListener("loadedmetadata", () => {
-    if (!isNaN(player.duration)) audioTime.textContent = formatTime(player.duration);
-});
-
-player.addEventListener("play", () => requestAnimationFrame(updateProgress));
-
-function formatTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes}:${secs.toString().padStart(2, "0")}`;
-}
-
-// PROGRESS BAR
-function updateProgress() {
-    if (!player.duration) return;
-    const percent = (player.currentTime / player.duration) * 100;
-    progressBar.style.width = percent + "%";
-    requestAnimationFrame(updateProgress);
-}
-
-container.addEventListener("click", e => {
-    if (!player.duration) return;
-    const width = container.clientWidth;
-    const clickX = e.offsetX;
-    player.currentTime = (clickX / width) * player.duration;
-});
-
-let isDragging = false;
-dot.addEventListener("mousedown", () => isDragging = true);
-document.addEventListener("mouseup", () => isDragging = false);
-document.addEventListener("mousemove", e => {
-    if (!isDragging || !player.duration) return;
-    const rect = container.getBoundingClientRect();
-    let offsetX = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-    const percent = offsetX / rect.width;
-    player.currentTime = percent * player.duration;
-    progressBar.style.width = percent * 100 + "%";
-});
-
-// INITIAL RENDER
 renderArtists();
+renderHomeAlbums();

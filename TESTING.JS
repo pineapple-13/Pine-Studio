@@ -162,7 +162,6 @@ function renderList(container, items, createItemCallback) {
 
 // RENDER ARTISTS
 function renderArtists() {
-
     artistsFirstRow.innerHTML = "";
     artistsSecondRow.innerHTML = "";
 
@@ -191,7 +190,6 @@ function renderArtists() {
         }
 
     });
-
 }
 
 function openArtist(index){
